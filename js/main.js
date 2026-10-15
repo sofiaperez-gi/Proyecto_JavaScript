@@ -3,8 +3,14 @@
 import { iniciarCatalogo } from './catalogo.js';
 import { iniciarCarrito } from './carrito.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+function inicializar() {
   iniciarCatalogo();
   iniciarCarrito();
-});
+}
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', inicializar);
+} else {
+  inicializar();
+}
 
