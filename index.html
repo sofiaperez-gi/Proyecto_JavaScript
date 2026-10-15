@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FakeStore</title>
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/catalogo.css">
+  <link rel="stylesheet" href="./css/carrito.css">
+</head>
+<body>
+  <!-- Encabezado principal y acceso al carrito -->
+  <header>
+    <h1>FakeStore</h1>
+    <button type="button" id="btn-carrito" aria-label="Abrir carrito">
+      Carrito (<span id="contador-carrito">0</span>)
+    </button>
+  </header>
+
+  <!-- Barra de controles: búsqueda, filtros y ordenamiento -->
+  <section id="controles">
+    <input type="search" id="buscador" placeholder="Buscar productos...">
+    <select id="filtro-categoria">
+      <option value="">Todas las categorías</option>
+    </select>
+    <select id="ordenar">
+      <option value="">Ordenar por</option>
+      <option value="precio-asc">Precio: Menor a mayor</option>
+      <option value="precio-desc">Precio: Mayor a menor</option>
+    </select>
+  </section>
+
+  <!-- Contenedor principal del catálogo de productos -->
+  <main id="catalogo">
+    <p id="mensaje-estado"></p>
+  </main>
+
+  <!-- Panel lateral del carrito de compras -->
+  <aside id="carrito" hidden>
+    <button type="button" id="btn-cerrar" aria-label="Cerrar carrito">&times;</button>
+    <h2>Carrito de Compras</h2>
+    <ul id="lista-carrito"></ul>
+    <p>Total: $<span id="total-carrito">0.00</span></p>
+    <button type="button" id="btn-vaciar">Vaciar carrito</button>
+  </aside>
+
+  <!-- Módulo principal de JavaScript -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
+
