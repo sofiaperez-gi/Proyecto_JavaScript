@@ -36,6 +36,18 @@ export function renderizarProductos(productos) {
     contenedorCatalogo.appendChild(mensajeEstado);
   }
 
+  if (productos.length === 0) {
+    if (mensajeEstado) {
+      mensajeEstado.textContent = 'No se encontraron productos que coincidan con la búsqueda.';
+      mensajeEstado.hidden = false;
+    }
+    return;
+  }
+
+  if (mensajeEstado) {
+    mensajeEstado.hidden = true;
+  }
+
   const fragmento = document.createDocumentFragment();
 
   productos.forEach((producto) => {
@@ -54,7 +66,74 @@ export function renderizarProductos(productos) {
   contenedorCatalogo.appendChild(fragmento);
 }
 
-// Inicializa el catálogo, obtiene los datos de la API y controla el estado
+// Configura las opciones de ordenamiento por título adicionales si no existen
+function configurarOpcionesOrden() {
+  const selectOrdenar = document.getElementById('ordenar');
+  if (!selectOrdenar || selectOrdenar.querySelector('option[value="az"]')) return;
+
+  const opcionAZ = document.createElement('option');
+  opcionAZ.value = 'az';
+  opcionAZ.textContent = 'Título: A - Z';
+
+  const opcionZA = document.createElement('option');
+  opcionZA.value = 'za';
+  opcionZA.textContent = 'Título: Z - A';
+
+  selectOrdenar.appendChild(opcionAZ);
+  selectOrdenar.appendChild(opcionZA);
+}
+
+// Aplica en cadena búsqueda, filtro por categoría y ordenamiento con JavaScript
+export function aplicarFiltros() {
+  let resultado = [...listaProductos];
+
+  // a) Búsqueda por texto en título o descripción
+  const buscador = document.getElementById('buscador');
+  const textoBuscador = buscador?.value.trim().toLowerCase() || '';
+  if (textoBuscador) {
+    resultado = resultado.filter((producto) =>
+      producto.title.toLowerCase().includes(textoBuscador) ||
+      producto.description.toLowerCase().includes(textoBuscador)
+    );
+  }
+
+  // b) Filtro por categoría seleccionada
+  const selectCategoria = document.getElementById('filtro-categoria');
+  const categoria = selectCategoria?.value.toLowerCase() || '';
+  if (categoria && categoria !== 'all' && categoria !== 'todas') {
+    resultado = resultado.filter((producto) =>
+      producto.category.toLowerCase() === categoria
+    );
+  }
+
+  // c) Ordenamiento con .sort() por precio o título
+  const selectOrdenar = document.getElementById('ordenar');
+  const criterioOrden = selectOrdenar?.value || '';
+  if (criterioOrden === 'precio-asc') {
+    resultado.sort((a, b) => a.price - b.price);
+  } else if (criterioOrden === 'precio-desc') {
+    resultado.sort((a, b) => b.price - a.price);
+  } else if (criterioOrden === 'az' || criterioOrden === 'titulo-asc') {
+    resultado.sort((a, b) => a.title.localeCompare(b.title));
+  } else if (criterioOrden === 'za' || criterioOrden === 'titulo-desc') {
+    resultado.sort((a, b) => b.title.localeCompare(a.title));
+  }
+
+  renderizarProductos(resultado);
+}
+
+// Registra los eventos input y change sobre los controles de filtrado
+function registrarEventosFiltros() {
+  const buscador = document.getElementById('buscador');
+  const filtroCategoria = document.getElementById('filtro-categoria');
+  const selectOrdenar = document.getElementById('ordenar');
+
+  buscador?.addEventListener('input', aplicarFiltros);
+  filtroCategoria?.addEventListener('change', aplicarFiltros);
+  selectOrdenar?.addEventListener('change', aplicarFiltros);
+}
+
+// Inicializa el catálogo, obtiene los datos de la API y registra los eventos
 export async function iniciarCatalogo() {
   const mensajeEstado = document.getElementById('mensaje-estado');
 
@@ -71,7 +150,9 @@ export async function iniciarCatalogo() {
     }
 
     cargarCategorias(listaProductos);
+    configurarOpcionesOrden();
     renderizarProductos(listaProductos);
+    registrarEventosFiltros();
   } catch (error) {
     if (mensajeEstado) {
       mensajeEstado.textContent = 'Hubo un error al cargar los productos. Intenta nuevamente más tarde.';
