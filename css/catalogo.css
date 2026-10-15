@@ -1,2 +1,203 @@
 /* Desarrollador A: Estilos visuales del catálogo, controles y tarjetas de productos */
 
+/* Encabezado principal y botón de carrito */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: var(--color-superficie);
+  border-bottom: 1px solid var(--color-borde);
+  box-shadow: var(--sombra-suave);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primario);
+}
+
+#btn-carrito {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background-color: var(--color-primario);
+  color: #ffffff;
+  border: none;
+  border-radius: var(--radio-borde);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+#btn-carrito:hover {
+  background-color: var(--color-primario-hover);
+}
+
+#btn-carrito:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
+}
+
+#contador-carrito {
+  background-color: #ffffff;
+  color: var(--color-primario);
+  padding: 0.15rem 0.5rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+/* Sección de controles: buscador, filtro y ordenamiento */
+#controles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+  align-items: center;
+}
+
+#buscador {
+  flex: 1 1 280px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  font-size: 0.95rem;
+  background-color: var(--color-superficie);
+  color: var(--color-texto);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#buscador:focus {
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+#filtro-categoria,
+#ordenar {
+  flex: 1 1 200px;
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  font-size: 0.95rem;
+  background-color: var(--color-superficie);
+  color: var(--color-texto);
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+#filtro-categoria:focus,
+#ordenar:focus {
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+/* Catálogo y cuadrícula responsiva de productos */
+#catalogo {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem 2rem 3rem 2rem;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+#mensaje-estado {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1.1rem;
+  color: var(--color-texto-secundario);
+  padding: 3rem 1rem;
+}
+
+/* Tarjeta individual de producto */
+.tarjeta-producto {
+  background-color: var(--color-superficie);
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: var(--sombra-suave);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-producto:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-elevada);
+}
+
+.tarjeta-producto img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 1rem;
+  background-color: #ffffff;
+}
+
+.tarjeta-producto h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-texto);
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.tarjeta-producto p {
+  font-size: 0.85rem;
+  color: var(--color-texto-secundario);
+  margin-bottom: 1rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex-grow: 1;
+}
+
+.tarjeta-producto strong {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--color-texto);
+  margin-bottom: 1rem;
+  display: block;
+}
+
+/* Botón de agregar al carrito con accesibilidad y contraste */
+.btn-agregar {
+  width: 100%;
+  background-color: var(--color-primario);
+  color: #ffffff;
+  border: none;
+  padding: 0.65rem 1rem;
+  border-radius: var(--radio-borde);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-agregar:hover {
+  background-color: var(--color-primario-hover);
+}
+
+.btn-agregar:active {
+  transform: scale(0.98);
+}
+
+.btn-agregar:focus-visible {
+  outline: 2px solid var(--color-primario);
+  outline-offset: 2px;
+}
