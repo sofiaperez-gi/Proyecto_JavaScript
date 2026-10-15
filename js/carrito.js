@@ -113,58 +113,62 @@ export function renderizarCarrito() {
   }
 }
 
-// Configura los escuchadores de eventos para interactuar con el carrito
-function configurarEventos() {
+// Inicializa el carrito cargando datos de localStorage, renderizando y registrando eventos click
+export function iniciarCarrito() {
+  cargarDesdeStorage();
+  renderizarCarrito();
+
   const btnCarrito = document.getElementById('btn-carrito');
   const btnCerrar = document.getElementById('btn-cerrar');
   const btnVaciar = document.getElementById('btn-vaciar');
-  const asideCarrito = document.getElementById('carrito');
+  const carritoElemento = document.getElementById('carrito');
+  const catalogoElemento = document.getElementById('catalogo');
   const listaCarrito = document.getElementById('lista-carrito');
 
-  // Abre el panel lateral del carrito
+  // a) Muestra el carrito cambiando la propiedad hidden a false
   btnCarrito?.addEventListener('click', () => {
-    if (asideCarrito) asideCarrito.hidden = false;
+    if (carritoElemento) {
+      carritoElemento.hidden = false;
+    }
   });
 
-  // Cierra el panel lateral del carrito
+  // a) Oculta el carrito cambiando la propiedad hidden a true
   btnCerrar?.addEventListener('click', () => {
-    if (asideCarrito) asideCarrito.hidden = true;
+    if (carritoElemento) {
+      carritoElemento.hidden = true;
+    }
   });
 
-  // Vacia todos los productos del carrito
-  btnVaciar?.addEventListener('click', () => {
-    vaciarCarrito();
+  // b) Delegacion de eventos en #catalogo para agregar productos con btn-agregar
+  catalogoElemento?.addEventListener('click', (e) => {
+    if (e.target.classList.contains('btn-agregar')) {
+      const id = e.target.dataset.id;
+      if (id) {
+        agregarAlCarrito(id);
+      }
+    }
   });
 
-  // Maneja cambios de cantidad y eliminacion mediante delegacion de eventos
-  listaCarrito?.addEventListener('click', (evento) => {
-    const boton = evento.target.closest('button');
+  // c) Delegacion de eventos en #lista-carrito usando data-id y data-accion
+  listaCarrito?.addEventListener('click', (e) => {
+    const boton = e.target.closest('button');
     if (!boton) return;
 
     const id = boton.dataset.id;
-    if (!id) return;
+    const accion = boton.dataset.accion;
+    if (!id || !accion) return;
 
-    if (boton.dataset.accion === 'sumar' || boton.classList.contains('btn-sumar')) {
+    if (accion === 'sumar') {
       cambiarCantidad(id, 1);
-    } else if (boton.dataset.accion === 'restar' || boton.classList.contains('btn-restar')) {
+    } else if (accion === 'restar') {
       cambiarCantidad(id, -1);
-    } else if (boton.dataset.accion === 'eliminar' || boton.classList.contains('btn-eliminar')) {
+    } else if (accion === 'eliminar') {
       eliminarDelCarrito(id);
     }
   });
 
-  // Delegacion de eventos para agregar productos desde el catalogo
-  document.addEventListener('click', (evento) => {
-    const btnAgregar = evento.target.closest('.btn-agregar');
-    if (btnAgregar && btnAgregar.dataset.id) {
-      agregarAlCarrito(btnAgregar.dataset.id);
-    }
+  // d) Escucha el clic en #btn-vaciar y llama a vaciarCarrito
+  btnVaciar?.addEventListener('click', () => {
+    vaciarCarrito();
   });
-}
-
-// Inicializa el carrito cargando datos previos y registrando eventos
-export function iniciarCarrito() {
-  cargarDesdeStorage();
-  renderizarCarrito();
-  configurarEventos();
 }
