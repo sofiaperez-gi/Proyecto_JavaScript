@@ -79,12 +79,19 @@ export function renderizarCarrito() {
 
   if (listaCarrito) {
     listaCarrito.innerHTML = '';
-    const fragmento = document.createDocumentFragment();
 
-    items.forEach((item) => {
-      const articulo = document.createElement('article');
-      articulo.className = 'item-carrito';
-      articulo.innerHTML = `
+    if (items.length === 0) {
+      const itemVacio = document.createElement('li');
+      itemVacio.className = 'carrito-vacio';
+      itemVacio.textContent = 'Tu carrito está vacío';
+      listaCarrito.appendChild(itemVacio);
+    } else {
+      const fragmento = document.createDocumentFragment();
+
+      items.forEach((item) => {
+        const itemCarrito = document.createElement('li');
+        itemCarrito.className = 'item-carrito';
+        itemCarrito.innerHTML = `
         <img src="${item.image}" alt="${item.title}">
         <h4>${item.title}</h4>
         <p>$${Number(item.price).toFixed(2)}</p>
@@ -93,10 +100,11 @@ export function renderizarCarrito() {
         <button type="button" class="btn-sumar" data-accion="sumar" data-id="${item.id}">+</button>
         <button type="button" class="btn-eliminar" data-accion="eliminar" data-id="${item.id}">Eliminar</button>
       `;
-      fragmento.appendChild(articulo);
-    });
+        fragmento.appendChild(itemCarrito);
+      });
 
-    listaCarrito.appendChild(fragmento);
+      listaCarrito.appendChild(fragmento);
+    }
   }
 
   const totalPrecio = items.reduce((acumulado, item) => acumulado + Number(item.price) * item.cantidad, 0);

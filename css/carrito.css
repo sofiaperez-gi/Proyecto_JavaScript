@@ -1,9 +1,8 @@
 /* Desarrollador B: Estilos visuales del panel lateral y elementos del carrito */
 
-/* Oculta el panel cuando tiene el atributo hidden para neutralizar display: flex */
-aside[hidden],
+/* Oculta el panel cuando tiene el atributo hidden para no ser sobrescrito por display: flex */
 #carrito[hidden] {
-  display: none !important;
+  display: none;
 }
 
 /* Panel lateral del carrito fijo a la derecha con distribucion en columna */
@@ -61,6 +60,15 @@ aside[hidden],
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+}
+
+/* Mensaje visual centrado cuando el carrito esta vacio */
+.carrito-vacio {
+  text-align: center;
+  color: var(--color-texto-secundario, #64748b);
+  font-size: 1rem;
+  padding: 2.5rem 1rem;
+  list-style: none;
 }
 
 /* Tarjeta individual de cada producto en el carrito sin divs */
