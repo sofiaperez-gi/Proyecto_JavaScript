@@ -25,6 +25,37 @@ export function cargarCategorias(productos) {
   });
 }
 
+// Observador de intersección para revelado dinámico de tarjetas con scroll
+let observadorTarjetas = null;
+
+function configurarObservadorScroll(tarjetas) {
+  if (observadorTarjetas) {
+    observadorTarjetas.disconnect();
+  }
+
+  if (!('IntersectionObserver' in window)) {
+    tarjetas.forEach((tarjeta) => tarjeta.classList.add('visible'));
+    return;
+  }
+
+  observadorTarjetas = new IntersectionObserver(
+    (entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    },
+    {
+      root: null,
+      threshold: 0.1
+    }
+  );
+
+  tarjetas.forEach((tarjeta) => observadorTarjetas.observe(tarjeta));
+}
+
 // Renderiza las tarjetas de los productos en el catálogo sin divs innecesarios
 export function renderizarProductos(productos) {
   const contenedorCatalogo = document.getElementById('catalogo');
@@ -50,9 +81,10 @@ export function renderizarProductos(productos) {
 
   const fragmento = document.createDocumentFragment();
 
-  productos.forEach((producto) => {
+  productos.forEach((producto, index) => {
     const tarjeta = document.createElement('article');
     tarjeta.className = 'tarjeta-producto';
+    tarjeta.style.setProperty('--orden', index);
     tarjeta.innerHTML = `
       <img src="${producto.image}" alt="${producto.title}">
       <small class="categoria-producto">${producto.category}</small>
@@ -65,6 +97,9 @@ export function renderizarProductos(productos) {
   });
 
   contenedorCatalogo.appendChild(fragmento);
+
+  const tarjetas = contenedorCatalogo.querySelectorAll('.tarjeta-producto');
+  configurarObservadorScroll(tarjetas);
 }
 
 // Configura las opciones de ordenamiento por título adicionales si no existen
@@ -134,6 +169,35 @@ function registrarEventosFiltros() {
   selectOrdenar?.addEventListener('change', aplicarFiltros);
 }
 
+// Feedback visual temporal al hacer clic en agregar al carrito (sin detener propagación)
+let feedbackAgregarRegistrado = false;
+
+function registrarFeedbackAgregar() {
+  if (feedbackAgregarRegistrado) return;
+  const contenedorCatalogo = document.getElementById('catalogo');
+  if (!contenedorCatalogo) return;
+
+  contenedorCatalogo.addEventListener('click', (evento) => {
+    const boton = evento.target.closest('.btn-agregar');
+    if (!boton) return;
+
+    boton.textContent = '✓ Agregado';
+    boton.classList.add('agregado');
+
+    if (boton._timerFeedback) {
+      clearTimeout(boton._timerFeedback);
+    }
+
+    boton._timerFeedback = setTimeout(() => {
+      boton.textContent = 'Agregar al carrito';
+      boton.classList.remove('agregado');
+      boton._timerFeedback = null;
+    }, 700);
+  });
+
+  feedbackAgregarRegistrado = true;
+}
+
 // Inicializa el catálogo, obtiene los datos de la API y registra los eventos
 export async function iniciarCatalogo() {
   const mensajeEstado = document.getElementById('mensaje-estado');
@@ -154,6 +218,7 @@ export async function iniciarCatalogo() {
     configurarOpcionesOrden();
     renderizarProductos(listaProductos);
     registrarEventosFiltros();
+    registrarFeedbackAgregar();
   } catch (error) {
     if (mensajeEstado) {
       mensajeEstado.textContent = 'Hubo un error al cargar los productos. Intenta nuevamente más tarde.';
@@ -161,3 +226,4 @@ export async function iniciarCatalogo() {
     }
   }
 }
+
