@@ -58,6 +58,8 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -66,9 +68,12 @@ body {
   color: var(--color-on-surface);
   line-height: 1.5;
   min-height: 100vh;
+  min-height: 100dvh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  width: 100%;
+  position: relative;
 }
 
 ::selection {
@@ -82,6 +87,8 @@ select {
   font: inherit;
   color: inherit;
   border-radius: 0;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 img {
@@ -90,7 +97,7 @@ img {
   height: auto;
 }
 
-/* Regla para ocultar elementos con el atributo hidden */
+/* Regla obligatoria para el atributo hidden */
 [hidden] {
   display: none !important;
 }
