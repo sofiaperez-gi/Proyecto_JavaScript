@@ -55,10 +55,11 @@ export function renderizarProductos(productos) {
     tarjeta.className = 'tarjeta-producto';
     tarjeta.innerHTML = `
       <img src="${producto.image}" alt="${producto.title}">
+      <small class="categoria-producto">${producto.category}</small>
       <h3>${producto.title}</h3>
       <p>${producto.description}</p>
       <strong>$${Number(producto.price).toFixed(2)}</strong>
-      <button class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>
+      <button type="button" class="btn-agregar" data-id="${producto.id}">Agregar al carrito</button>
     `;
     fragmento.appendChild(tarjeta);
   });
