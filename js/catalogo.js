@@ -1,15 +1,15 @@
-// Desarrollador A: Módulo del catálogo, búsqueda, filtros y renderizado
-
+// Módulo del Catálogo: Búsqueda, filtros, orden y visualización de productos
 import { obtenerProductos } from './api.js';
 
+// Memoria local donde guardamos los productos traídos de la tienda
 let listaProductos = [];
 
-// Busca y retorna un producto de la lista en memoria según su identificador
+// Busca y devuelve un producto por su ID
 export function obtenerProductoPorId(id) {
   return listaProductos.find((producto) => producto.id === Number(id));
 }
 
-// Extrae categorías únicas y las inserta dinámicamente en el selector
+// Llena el selector de categorías automáticamente sin repetir nombres
 export function cargarCategorias(productos) {
   const selectCategoria = document.getElementById('filtro-categoria');
   if (!selectCategoria) return;
@@ -25,7 +25,7 @@ export function cargarCategorias(productos) {
   });
 }
 
-// Observador de intersección para revelado dinámico de tarjetas con scroll
+// Controla la animación para mostrar las tarjetas suavemente al bajar con el scroll
 let observadorTarjetas = null;
 
 function configurarObservadorScroll(tarjetas) {
@@ -33,6 +33,7 @@ function configurarObservadorScroll(tarjetas) {
     observadorTarjetas.disconnect();
   }
 
+  // Si el navegador no soporta el observador, muestra las tarjetas directamente
   if (!('IntersectionObserver' in window)) {
     tarjetas.forEach((tarjeta) => tarjeta.classList.add('visible'));
     return;
@@ -47,16 +48,13 @@ function configurarObservadorScroll(tarjetas) {
         }
       });
     },
-    {
-      root: null,
-      threshold: 0.1
-    }
+    { threshold: 0.1 }
   );
 
   tarjetas.forEach((tarjeta) => observadorTarjetas.observe(tarjeta));
 }
 
-// Renderiza las tarjetas de los productos en el catálogo sin divs innecesarios
+// Dibuja todas las tarjetas de productos en la página
 export function renderizarProductos(productos) {
   const contenedorCatalogo = document.getElementById('catalogo');
   if (!contenedorCatalogo) return;
@@ -67,6 +65,7 @@ export function renderizarProductos(productos) {
     contenedorCatalogo.appendChild(mensajeEstado);
   }
 
+  // Aviso si no hay resultados para la búsqueda
   if (productos.length === 0) {
     if (mensajeEstado) {
       mensajeEstado.textContent = 'No se encontraron productos que coincidan con la búsqueda.';
@@ -79,6 +78,7 @@ export function renderizarProductos(productos) {
     mensajeEstado.hidden = true;
   }
 
+  // Crea cada tarjeta con su información y botón de compra
   const fragmento = document.createDocumentFragment();
 
   productos.forEach((producto, index) => {
@@ -98,11 +98,12 @@ export function renderizarProductos(productos) {
 
   contenedorCatalogo.appendChild(fragmento);
 
+  // Activa la animación de entrada para las tarjetas recién creadas
   const tarjetas = contenedorCatalogo.querySelectorAll('.tarjeta-producto');
   configurarObservadorScroll(tarjetas);
 }
 
-// Configura las opciones de ordenamiento por título adicionales si no existen
+// Agrega las opciones de orden alfabético al menú desplegable si no existen
 function configurarOpcionesOrden() {
   const selectOrdenar = document.getElementById('ordenar');
   if (!selectOrdenar || selectOrdenar.querySelector('option[value="az"]')) return;
@@ -119,11 +120,11 @@ function configurarOpcionesOrden() {
   selectOrdenar.appendChild(opcionZA);
 }
 
-// Aplica en cadena búsqueda, filtro por categoría y ordenamiento con JavaScript
+// Aplica al mismo tiempo la búsqueda por texto, filtro de categoría y ordenamiento
 export function aplicarFiltros() {
   let resultado = [...listaProductos];
 
-  // a) Búsqueda por texto en título o descripción
+  // 1. Filtra por lo que el usuario escribió en el buscador
   const buscador = document.getElementById('buscador');
   const textoBuscador = buscador?.value.trim().toLowerCase() || '';
   if (textoBuscador) {
@@ -133,7 +134,7 @@ export function aplicarFiltros() {
     );
   }
 
-  // b) Filtro por categoría seleccionada
+  // 2. Filtra por la categoría seleccionada
   const selectCategoria = document.getElementById('filtro-categoria');
   const categoria = selectCategoria?.value.toLowerCase() || '';
   if (categoria && categoria !== 'all' && categoria !== 'todas') {
@@ -142,7 +143,7 @@ export function aplicarFiltros() {
     );
   }
 
-  // c) Ordenamiento con .sort() por precio o título
+  // 3. Ordena los productos por precio o por nombre
   const selectOrdenar = document.getElementById('ordenar');
   const criterioOrden = selectOrdenar?.value || '';
   if (criterioOrden === 'precio-asc') {
@@ -158,7 +159,7 @@ export function aplicarFiltros() {
   renderizarProductos(resultado);
 }
 
-// Registra los eventos input y change sobre los controles de filtrado
+// Escucha cuando el usuario escribe en el buscador o cambia los menús
 function registrarEventosFiltros() {
   const buscador = document.getElementById('buscador');
   const filtroCategoria = document.getElementById('filtro-categoria');
@@ -169,7 +170,7 @@ function registrarEventosFiltros() {
   selectOrdenar?.addEventListener('change', aplicarFiltros);
 }
 
-// Feedback visual temporal al hacer clic en agregar al carrito (sin detener propagación)
+// Cambia el botón a "✓ Agregado" por un momento al hacer clic para dar confirmación visual
 let feedbackAgregarRegistrado = false;
 
 function registrarFeedbackAgregar() {
@@ -198,7 +199,7 @@ function registrarFeedbackAgregar() {
   feedbackAgregarRegistrado = true;
 }
 
-// Inicializa el catálogo, obtiene los datos de la API y registra los eventos
+// Función principal: pide los productos a la API y enciende el catálogo
 export async function iniciarCatalogo() {
   const mensajeEstado = document.getElementById('mensaje-estado');
 
@@ -208,6 +209,7 @@ export async function iniciarCatalogo() {
       mensajeEstado.hidden = false;
     }
 
+    // Trae los datos de la tienda desde el servidor externo
     listaProductos = await obtenerProductos();
 
     if (mensajeEstado) {
@@ -226,4 +228,3 @@ export async function iniciarCatalogo() {
     }
   }
 }
-

@@ -1,9 +1,11 @@
 /* ==========================================================================
-   Cart Drawer Stylesheet - Maison Studio / Editorial Modernism
+   Estilos del Carrito de Compras - Maison Studio / Editorial Modernism
    Archivo: css/carrito2.css
    ========================================================================== */
 
-/* 1. Panel lateral del carrito (<aside id="carrito">) */
+/* --------------------------------------------------------------------------
+   SECCIÓN 1: PANEL LATERAL (Aside flotante y regla de visibilidad)
+   -------------------------------------------------------------------------- */
 #carrito {
   position: fixed;
   top: 0;
@@ -20,15 +22,17 @@
   flex-direction: column;
   padding: 1.5rem;
   overflow: hidden;
-  box-sizing: border-box;
 }
 
+/* Oculta completamente el panel cuando JavaScript activa el atributo hidden */
 #carrito[hidden],
 [hidden] {
   display: none !important;
 }
 
-/* 2. Botón de cierre y Título */
+/* --------------------------------------------------------------------------
+   SECCIÓN 2: CABECERA DEL PANEL (Título y botón de cerrar)
+   -------------------------------------------------------------------------- */
 #btn-cerrar {
   align-self: flex-end;
   display: inline-flex;
@@ -66,7 +70,9 @@
   flex-shrink: 0;
 }
 
-/* 3. Lista de artículos en el carrito (<ul id="lista-carrito">) */
+/* --------------------------------------------------------------------------
+   SECCIÓN 3: LISTA DE ARTÍCULOS (Contenedor con scroll vertical y aviso)
+   -------------------------------------------------------------------------- */
 #lista-carrito {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -80,6 +86,7 @@
   min-height: 0;
 }
 
+/* Barra de desplazamiento sutil */
 #lista-carrito::-webkit-scrollbar {
   width: 4px;
 }
@@ -88,7 +95,7 @@
   background: var(--color-outline-variant);
 }
 
-/* Estado de carrito vacío */
+/* Mensaje centrado cuando no hay productos */
 .carrito-vacio {
   display: flex;
   flex-direction: column;
@@ -112,7 +119,9 @@
   letter-spacing: 0.2em;
 }
 
-/* 4. Elemento individual del carrito (<li class="item-carrito">) */
+/* --------------------------------------------------------------------------
+   SECCIÓN 4: TARJETA DE PRODUCTO EN EL CARRITO (Cuadrícula y controles)
+   -------------------------------------------------------------------------- */
 .item-carrito {
   display: grid;
   grid-template-columns: 55px 1fr 28px 28px;
@@ -125,13 +134,13 @@
   padding: 0.75rem 0;
   border-bottom: 1px solid var(--color-surface-container);
   width: 100%;
-  box-sizing: border-box;
 }
 
 .item-carrito:last-child {
   border-bottom: none;
 }
 
+/* Miniatura del producto */
 .item-carrito img {
   grid-area: img;
   width: 55px;
@@ -140,9 +149,9 @@
   background-color: #ffffff;
   padding: 0.25rem;
   border: 1px solid var(--color-surface-container);
-  box-sizing: border-box;
 }
 
+/* Título del artículo */
 .item-carrito h4 {
   grid-area: title;
   font-family: var(--font-headline);
@@ -159,6 +168,7 @@
   min-width: 0;
 }
 
+/* Precio unitario */
 .item-carrito p:nth-of-type(1) {
   grid-area: price;
   font-family: var(--font-headline);
@@ -168,6 +178,7 @@
   min-width: 0;
 }
 
+/* Cantidad seleccionada */
 .item-carrito p:nth-of-type(2) {
   grid-area: qty;
   font-size: 12px;
@@ -175,6 +186,7 @@
   min-width: 0;
 }
 
+/* Botones para restar (-) y sumar (+) unidades */
 .item-carrito .btn-restar,
 .item-carrito .btn-sumar {
   display: inline-flex;
@@ -190,7 +202,6 @@
   font-weight: 600;
   line-height: 1;
   cursor: pointer;
-  box-sizing: border-box;
   transition: all var(--transition-fast);
 }
 
@@ -209,6 +220,7 @@
   border-color: var(--color-primary);
 }
 
+/* Botón para eliminar el producto */
 .item-carrito .btn-eliminar {
   grid-area: delete;
   justify-self: end;
@@ -230,7 +242,9 @@
   color: var(--color-error);
 }
 
-/* 5. Pie del carrito (Total y botón vaciar) */
+/* --------------------------------------------------------------------------
+   SECCIÓN 5: PIE DEL PANEL (Total acumulado y vaciar carrito)
+   -------------------------------------------------------------------------- */
 #carrito > p {
   display: flex;
   justify-content: space-between;
@@ -250,6 +264,7 @@
   font-size: 1.25rem;
 }
 
+/* Botón para reiniciar y vaciar el carrito */
 #btn-vaciar {
   width: 100%;
   margin-top: 0.75rem;
@@ -264,7 +279,6 @@
   letter-spacing: 0.1em;
   cursor: pointer;
   flex-shrink: 0;
-  box-sizing: border-box;
   transition: all var(--transition-fast);
 }
 
@@ -277,5 +291,3 @@
 #btn-vaciar:active {
   transform: scale(0.99);
 }
-
-
