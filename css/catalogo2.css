@@ -1,11 +1,4 @@
-/* ==========================================================================
-   Estilos del Catálogo - Maison Studio / Editorial Modernism
-   Archivo: css/catalogo2.css
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   SECCIÓN 1: ENCABEZADO (Header y botón de acceso al carrito)
-   -------------------------------------------------------------------------- */
+/*SECCIÓN 1: ENCABEZADO (Header y botón de acceso al carrito)*/
 header {
   position: sticky;
   top: 0;
@@ -328,4 +321,158 @@ header h1 {
   border-color: #15803d;
   color: #ffffff;
   transform: scale(0.98);
+}
+
+/* Tarjetas interactivas al clic */
+.tarjeta-producto {
+  cursor: pointer;
+}
+
+/* --------------------------------------------------------------------------
+   SECCIÓN 6: MODAL Y CARRUSEL DE PRODUCTOS (SE ABRE AL CLIC EN PRODUCTO)
+   -------------------------------------------------------------------------- */
+
+/* Ventana modal superpuesta fija a la pantalla */
+.modal-carrusel {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-carrusel[hidden] {
+  display: none !important;
+}
+
+/* Fondo oscurecido con desenfoque */
+.modal-carrusel-fondo {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.65);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Contenedor central del modal */
+.modal-carrusel-contenido {
+  position: relative;
+  z-index: 1;
+  background-color: var(--color-surface);
+  padding: 2.25rem 1.25rem 1.5rem 1.25rem;
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(26, 28, 26, 0.15);
+  max-width: 420px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Botón de cierre en esquina superior */
+.btn-cerrar-modal {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: transparent;
+  border: none;
+  font-family: var(--font-headline);
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--color-on-surface);
+  padding: 0.25rem 0.5rem;
+  transition: color var(--transition-fast);
+}
+
+.btn-cerrar-modal:hover {
+  color: var(--color-error);
+}
+
+/* Envoltorio con botones laterales de navegación */
+.carrusel-envoltorio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+/* Botones de flecha para hacer clic */
+.carrusel-nav {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  background-color: var(--color-surface-low);
+  border: 1px solid rgba(26, 28, 26, 0.15);
+  color: var(--color-on-surface);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.carrusel-nav:hover {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+}
+
+/* Marco visible del carrusel: recorta el contenido excedente y captura el foco */
+#carrusel {
+  max-width: 280px;
+  width: 100%;
+  overflow: hidden; /* Oculta las tarjetas que quedan fuera de la vista */
+  border: 1px solid rgba(26, 28, 26, 0.12);
+  background-color: var(--color-surface);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Anillo de foco accesible al navegar con la tecla Tab o hacer clic */
+#carrusel:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(26, 28, 26, 0.2);
+}
+
+/* Pista deslizante: alinea las tarjetas horizontalmente y aplica el desplazamiento suave */
+#carrusel-pista {
+  display: flex;
+  transition: transform 0.4s ease;
+  width: 100%;
+}
+
+/* Cada tarjeta del carrusel ocupa el 100% del marco visible */
+.carrusel-item {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  opacity: 1 !important;
+  transform: none !important;
+  box-shadow: none !important;
+  border: none !important;
+  cursor: default;
+}
+
+.carrusel-instruccion {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-on-surface-variant);
+  margin-top: 0.85rem;
+  text-align: center;
+}
+
+#carrusel-indicador {
+  font-weight: 700;
+  color: var(--color-primary);
 }

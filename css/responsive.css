@@ -1,11 +1,4 @@
-/* ==========================================================================
-   Responsive Stylesheet - Adaptabilidad Móvil, Tablet y Escritorio
-   Archivo: css/responsive.css
-   ========================================================================== */
-
-/* --------------------------------------------------------------------------
-   1. Pantallas Grandes y Escritorio (> 1100px)
-   -------------------------------------------------------------------------- */
+/*1. Pantallas Grandes y Escritorio (> 1100px)*/
 @media (min-width: 1101px) {
   #catalogo {
     grid-template-columns: repeat(4, 1fr);
@@ -13,9 +6,7 @@
   }
 }
 
-/* --------------------------------------------------------------------------
-   2. Tablets Horizontales y Laptops Compactas (821px - 1100px)
-   -------------------------------------------------------------------------- */
+/* 2. Tablets Horizontales y Laptops Compactas (821px - 1100px)*/
 @media (min-width: 821px) and (max-width: 1100px) {
   header,
   #controles,
@@ -30,9 +21,7 @@
   }
 }
 
-/* --------------------------------------------------------------------------
-   3. Tablets Verticales y Móviles Apaisados (561px - 820px)
-   -------------------------------------------------------------------------- */
+/*3. Tablets Verticales y Móviles Apaisados (561px - 820px) */
 @media (min-width: 561px) and (max-width: 820px) {
   header,
   #controles,

@@ -228,3 +228,83 @@ export async function iniciarCatalogo() {
     }
   }
 }
+
+// SECCIÓN: MODAL Y CARRUSEL DE PRODUCTOS (ABRE AL CLIC EN PRODUCTO)
+import { agregarAlCarrito } from './carrito.js';
+
+let indiceCarrusel = 0;
+let productosCarrusel = [];
+
+// Mueve el carrusel hacia un índice específico
+export function moverCarruselA(indice) {
+  const pista = document.getElementById('carrusel-pista');
+  if (!pista || !productosCarrusel.length) return;
+  indiceCarrusel = Math.max(0, Math.min(indice, productosCarrusel.length - 1));
+  pista.style.transform = `translateX(-${indiceCarrusel * 100}%)`;
+  const ind = document.getElementById('carrusel-indicador');
+  if (ind) ind.textContent = `${indiceCarrusel + 1} / ${productosCarrusel.length}`;
+  document.getElementById('carrusel')?.focus();
+}
+
+export const abrirCarruselEn = (i) => {
+  const m = document.getElementById('modal-carrusel');
+  if (m) { m.hidden = false; moverCarruselA(i); }
+};
+
+export const cerrarCarrusel = () => {
+  const m = document.getElementById('modal-carrusel');
+  if (m) m.hidden = true;
+};
+
+// Inicializa el carrusel y sus eventos
+export function iniciarCarrusel(productos) {
+  const modal = document.getElementById('modal-carrusel');
+  const pista = document.getElementById('carrusel-pista');
+  const carrusel = document.getElementById('carrusel');
+  if (!carrusel || !pista) return;
+
+  productosCarrusel = (productos?.length) ? productos : listaProductos;
+  if (!productosCarrusel?.length) return;
+
+  pista.innerHTML = productosCarrusel.map((p, i) => `
+    <article class="tarjeta-producto carrusel-item" data-index="${i}">
+      <img src="${p.image}" alt="${p.title}">
+      <small class="categoria-producto">${p.category}</small>
+      <h3>${p.title}</h3>
+      <p>${p.description}</p>
+      <strong>$${Number(p.price).toFixed(2)}</strong>
+      <button type="button" class="btn-agregar" data-id="${p.id}">Agregar al carrito</button>
+    </article>`).join('');
+
+  // Clic en tarjeta del catálogo: abre el carrusel
+  document.getElementById('catalogo')?.addEventListener('click', (e) => {
+    if (e.target.closest('.btn-agregar')) return;
+    const id = e.target.closest('.tarjeta-producto')?.querySelector('.btn-agregar')?.dataset.id;
+    const pos = productosCarrusel.findIndex((p) => p.id === Number(id));
+    if (pos !== -1) abrirCarruselEn(pos);
+  });
+
+  // Navegación por teclado
+  carrusel.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); moverCarruselA(indiceCarrusel + 1); }
+    if (e.key === 'ArrowLeft') { e.preventDefault(); moverCarruselA(indiceCarrusel - 1); }
+    if (e.key === 'Escape') cerrarCarrusel();
+  });
+
+  // Controles del modal
+  document.getElementById('carrusel-prev')?.addEventListener('click', () => moverCarruselA(indiceCarrusel - 1));
+  document.getElementById('carrusel-next')?.addEventListener('click', () => moverCarruselA(indiceCarrusel + 1));
+  document.getElementById('btn-cerrar-carrusel')?.addEventListener('click', cerrarCarrusel);
+  document.getElementById('modal-carrusel-fondo')?.addEventListener('click', cerrarCarrusel);
+  window.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal && !modal.hidden) cerrarCarrusel(); });
+
+  // Agregar al carrito desde el carrusel
+  pista.addEventListener('click', (e) => {
+    const btn = e.target.closest('.btn-agregar');
+    if (!btn?.dataset.id) return;
+    agregarAlCarrito(btn.dataset.id);
+    btn.textContent = '✓ Agregado';
+    btn.classList.add('agregado');
+    setTimeout(() => { btn.textContent = 'Agregar al carrito'; btn.classList.remove('agregado'); }, 700);
+  });
+}

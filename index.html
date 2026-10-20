@@ -11,20 +11,19 @@
   <link rel="stylesheet" href="css/responsive.css">
 </head>
 <body>
-  <!-- Encabezado principal y acceso al carrito -->
+  <!-- Encabezado -->
   <header>
     <h1>FakeStore</h1>
-    <button type="button" id="btn-carrito" aria-label="Abrir carrito">
-      Carrito (<span id="contador-carrito">0</span>)
-    </button>
+    <div class="acciones-header">
+      <button type="button" id="btn-historial-header">Historial</button>
+      <button type="button" id="btn-carrito">Carrito (<span id="contador-carrito">0</span>)</button>
+    </div>
   </header>
 
-  <!-- Barra de controles: búsqueda, filtros y ordenamiento -->
+  <!-- Filtros y buscador -->
   <section id="controles">
     <input type="search" id="buscador" placeholder="Buscar productos...">
-    <select id="filtro-categoria">
-      <option value="">Todas las categorías</option>
-    </select>
+    <select id="filtro-categoria"><option value="">Todas las categorías</option></select>
     <select id="ordenar">
       <option value="">Ordenar por</option>
       <option value="precio-asc">Precio: Menor a mayor</option>
@@ -32,22 +31,64 @@
     </select>
   </section>
 
-  <!-- Contenedor principal del catálogo de productos -->
-  <main id="catalogo">
-    <p id="mensaje-estado"></p>
-  </main>
+  <!-- Catálogo principal -->
+  <main id="catalogo"><p id="mensaje-estado"></p></main>
 
-  <!-- Panel lateral del carrito de compras -->
+  <!-- Modal del carrusel (abre al dar clic en producto) -->
+  <div id="modal-carrusel" class="modal-carrusel" hidden role="dialog" aria-modal="true">
+    <div class="modal-carrusel-fondo" id="modal-carrusel-fondo"></div>
+    <div class="modal-carrusel-contenido">
+      <button type="button" id="btn-cerrar-carrusel" class="btn-cerrar-modal">&times;</button>
+      <div class="carrusel-envoltorio">
+        <button type="button" id="carrusel-prev" class="carrusel-nav">&#10094;</button>
+        <div id="carrusel" tabindex="0" role="region"><div id="carrusel-pista"></div></div>
+        <button type="button" id="carrusel-next" class="carrusel-nav">&#10095;</button>
+      </div>
+      <p class="carrusel-instruccion"><span id="carrusel-indicador">1 / 1</span> &bull; <small>Navega con flechas ◄ ► o teclado</small></p>
+    </div>
+  </div>
+
+  <!-- Panel lateral con vistas intercambiables -->
   <aside id="carrito" hidden>
-    <button type="button" id="btn-cerrar" aria-label="Cerrar carrito">&times;</button>
-    <h2>Carrito de Compras</h2>
-    <ul id="lista-carrito"></ul>
-    <p>Total: $<span id="total-carrito">0.00</span></p>
-    <button type="button" id="btn-vaciar">Vaciar carrito</button>
+    <button type="button" id="btn-cerrar">&times;</button>
+
+    <!-- Vista 1: Artículos -->
+    <section id="vista-carrito">
+      <h2>Carrito de Compras</h2>
+      <ul id="lista-carrito"></ul>
+      <p>Total: $<span id="total-carrito">0.00</span></p>
+      <button type="button" id="btn-iniciar-compra">Continuar con la compra</button>
+      <button type="button" id="btn-ver-historial">Ver historial</button>
+      <button type="button" id="btn-vaciar">Vaciar carrito</button>
+      <p id="mensaje-carrito" class="mensaje-compra" hidden></p>
+    </section>
+
+    <!-- Vista 2: Formulario básico -->
+    <section id="vista-checkout" hidden>
+      <h2>Datos del Comprador</h2>
+      <p class="checkout-total">Total: <strong>$<span id="checkout-total-valor">0.00</span></strong></p>
+      <form id="form-compra">
+        <label for="compra-nombre">Nombre:</label>
+        <input type="text" id="compra-nombre" required placeholder="Nombre completo">
+        <label for="compra-email">Email:</label>
+        <input type="email" id="compra-email" required placeholder="correo@ejemplo.com">
+        <label for="compra-direccion">Dirección:</label>
+        <input type="text" id="compra-direccion" required placeholder="Dirección de entrega">
+        <button type="submit" id="btn-confirmar-compra">Confirmar Compra</button>
+        <button type="button" id="btn-cancelar-checkout">Volver al carrito</button>
+      </form>
+    </section>
+
+    <!-- Vista 3: Historial -->
+    <section id="vista-historial" hidden>
+      <h2>Historial de Compras</h2>
+      <p id="mensaje-historial-exito" class="mensaje-compra exito" hidden>¡Compra realizada con éxito!</p>
+      <div id="contenedor-historial"><ul id="lista-historial"></ul></div>
+      <button type="button" id="btn-volver-carrito">Volver al carrito</button>
+      <button type="button" id="btn-limpiar-historial">Limpiar historial</button>
+    </section>
   </aside>
 
-  <!-- Módulo principal de JavaScript -->
   <script type="module" src="./js/main.js"></script>
 </body>
 </html>
-
