@@ -1,10 +1,14 @@
-// Punto de entrada de la aplicación: inicialización de módulos en el DOM
-
-import { iniciarCatalogo } from './catalogo.js';
+import { iniciarCatalogo, iniciarCarrusel } from './catalogo.js';
 import { iniciarCarrito } from './carrito.js';
+import { obtenerProductos } from './api.js';
 
-document.addEventListener('DOMContentLoaded', () => {
+// Inicializa módulos y pasa productos al carrusel
+async function inicializar() {
   iniciarCatalogo();
   iniciarCarrito();
-});
+  iniciarCarrusel(await obtenerProductos());
+}
 
+document.readyState === 'loading'
+  ? document.addEventListener('DOMContentLoaded', inicializar)
+  : inicializar();
